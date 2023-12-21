@@ -1,0 +1,92 @@
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        #order_table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        #order_table th, #order_table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #order_table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #categories {
+            padding: 5px;
+        }
+
+        .error_message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+
+    <script type="text/javascript" src="dataObjects/dispatch.js"></script>
+    <script type="text/javascript" src="dataObjects/order.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript" src="constant.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#search_button').hide();
+            $("#order_table").hide();
+            $('.error_message').hide();
+
+            getRequest(
+                {
+                    "data": "dispatch_list",
+                },
+                update_dispatch_list
+            )
+
+            getRequest(
+                {
+                    "data": "transaction_list",
+                },
+                update_order_list
+            )
+        });
+    </script>
+</head>
+
+<body>
+    <div class='error_message'>Not found</div>
+    <select id="categories">
+        <option value="All">All</option>
+    </select>
+    <table id='transaction_table'>
+        <tr>
+            <th>ID</th>
+            <th>Status</th>
+            <th>Dispatch_date</th>
+        </tr>
+    </table>
+
+    <script type="text/javascript">
+        $('#categories').change(function() {
+            getRequest(
+                {
+                    "data": "orders_in_exact_dispatch",
+                    "dispatch": $(this).val()
+                },
+                update_transaction_list
+            )
+        });
+    </script>
+</body>
+</html>
